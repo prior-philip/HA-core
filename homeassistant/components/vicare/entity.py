@@ -51,3 +51,13 @@ class ViCareEntity(Entity):
             model=model,
             configuration_url="https://developer.viessmann.com/",
         )
+        
+    _attr_operation_modes = list(VICARE_OPERATION_MODES.keys())
+
+    @property
+    def operation_mode(self) -> str:
+        """Return current operation mode as a user-friendly string."""
+        for name, vicare_mode in VICARE_OPERATION_MODES.items():
+            if self._current_mode == vicare_mode:
+                return name
+        return "Unknown"

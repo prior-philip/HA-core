@@ -54,10 +54,24 @@ class ViCareEntity(Entity):
         
     _attr_operation_modes = list(VICARE_OPERATION_MODES.keys())
 
-    @property
+  @property
     def operation_mode(self) -> str:
         """Return current operation mode as a user-friendly string."""
-        for name, vicare_mode in VICARE_OPERATION_MODES.items():
-            if self._current_mode == vicare_mode:
+        vicare_mode = getattr(self, "_current_mode", None)
+        for name, api_mode in OPERATION_MODES.items():
+            if vicare_mode == api_mode:
                 return name
         return "Unknown"
+
+    @property
+    def operation_modes(self) -> list[str]:
+        """Return available operation modes."""
+        return list(OPERATION_MODES.keys())
+
+    def set_operation_mode(self, mode: str) -> None:
+        """Set operation mode ('Off', 'DHW only', or 'DHW and Heating')."""
+        vicare_mode = OPERATION_MODES.get(mode)
+        if not vicare_mode or vicare_mode not in getattr(self, "_attributes", {}).get("vicare_modes", []):
+            raise ValueError(f"Operation mode '{mode}' is not available.")
+        self._api.setMode(vicare_mode)
+        self._current_mode = vicare_mode

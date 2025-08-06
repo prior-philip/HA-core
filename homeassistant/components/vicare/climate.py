@@ -71,6 +71,11 @@ VICARE_TO_HA_HVAC_HEATING: dict[str, HVACMode] = {
     VICARE_MODE_HEATING: HVACMode.AUTO,
     VICARE_MODE_FORCEDNORMAL: HVACMode.HEAT,
 }
+VICARE_OPERATION_MODES = {
+    "Off": VICARE_MODE_OFF,  # "standby"
+    "DHW only": VICARE_MODE_DHW,  # "dhw"
+    "DHW and Heating": VICARE_MODE_DHWANDHEATING,  # "dhwAndHeating"
+}
 
 CHANGABLE_HEATING_PROGRAMS = [
     HeatingProgram.COMFORT,
